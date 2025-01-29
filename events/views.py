@@ -7,3 +7,5 @@ def home(request):
 def show_events(request):
     return HttpResponse('Welcome to the show events')
 
+def event_dashboard(request):
+    return render(request, "dashboard/event-dashboard.html")
