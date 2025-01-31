@@ -1,6 +1,5 @@
 from django.db import models
 
-
 class Category(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
@@ -8,14 +7,12 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
-
 class Participant(models.Model):
     name = models.CharField(max_length=100)
     email = models.EmailField()
 
     def __str__(self):
         return self.name
-
 
 class Event(models.Model):
     name = models.CharField(max_length=200)

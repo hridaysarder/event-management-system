@@ -1,0 +1,78 @@
+{% extends 'events/base.html' %}
+
+{% block content %}
+<div class="bg-white p-6 rounded shadow max-w-2xl mx-auto">
+    <h1 class="text-2xl font-bold mb-4">
+        {% if form.instance.pk %}
+            Update Event
+        {% else %}
+            Create Event
+        {% endif %}
+    </h1>
+    <form method="post">
+        {% csrf_token %}
+        <div class="mb-4">
+            <label class="block text-gray-700">Name</label>
+            <input type="text" name="name" class="border border-gray-300 rounded p-2 w-full" value="{{ form.name.value|default_if_none:'' }}">
+            {% if form.name.errors %}
+                <p class="text-red-500 text-sm">{{ form.name.errors }}</p>
+            {% endif %}
+        </div>
+        <div class="mb-4">
+            <label class="block text-gray-700">Description</label>
+            <textarea name="description" class="border border-gray-300 rounded p-2 w-full">{{ form.description.value|default_if_none:'' }}</textarea>
+            {% if form.description.errors %}
+                <p class="text-red-500 text-sm">{{ form.description.errors }}</p>
+            {% endif %}
+        </div>
+        <div class="mb-4">
+            <label class="block text-gray-700">Date</label>
+            <input type="date" name="date" class="border border-gray-300 rounded p-2 w-full" value="{{ form.date.value|default_if_none:'' }}">
+            {% if form.date.errors %}
+                <p class="text-red-500 text-sm">{{ form.date.errors }}</p>
+            {% endif %}
+        </div>
+        <div class="mb-4">
+            <label class="block text-gray-700">Time</label>
+            <input type="time" name="time" class="border border-gray-300 rounded p-2 w-full" value="{{ form.time.value|default_if_none:'' }}">
+            {% if form.time.errors %}
+                <p class="text-red-500 text-sm">{{ form.time.errors }}</p>
+            {% endif %}
+        </div>
+        <div class="mb-4">
+            <label class="block text-gray-700">Location</label>
+            <input type="text" name="location" class="border border-gray-300 rounded p-2 w-full" value="{{ form.location.value|default_if_none:'' }}">
+            {% if form.location.errors %}
+                <p class="text-red-500 text-sm">{{ form.location.errors }}</p>
+            {% endif %}
+        </div>
+        <div class="mb-4">
+            <label class="block text-gray-700">Category</label>
+            <select name="category" class="border border-gray-300 rounded p-2 w-full">
+                {% for category in form.category.field.queryset %}
+                    <option value="{{ category.id }}" {% if form.category.value == category.id %}selected{% endif %}>
+                        {{ category.name }}
+                    </option>
+                {% endfor %}
+            </select>
+            {% if form.category.errors %}
+                <p class="text-red-500 text-sm">{{ form.category.errors }}</p>
+            {% endif %}
+        </div>
+        <div class="mb-4">
+            <label class="block text-gray-700">Participants</label>
+            <select name="participants" multiple class="border border-gray-300 rounded p-2 w-full">
+                {% for participant in form.participants.field.queryset %}
+                    <option value="{{ participant.id }}" {% if participant.id in form.participants.value %}selected{% endif %}>
+                        {{ participant.name }}
+                    </option>
+                {% endfor %}
+            </select>
+            {% if form.participants.errors %}
+                <p class="text-red-500 text-sm">{{ form.participants.errors }}</p>
+            {% endif %}
+        </div>
+        <button type="submit" class="bg-blue-600 text-white p-2 rounded">Create</button>
+    </form>
+</div>
+{% endblock %}
