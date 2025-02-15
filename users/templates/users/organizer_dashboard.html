@@ -1,0 +1,37 @@
+{% extends 'events/base.html' %}
+
+{% block content %}
+<div class="bg-white p-6 rounded shadow">
+    <h1 class="text-2xl font-bold mb-4">Organizer Dashboard</h1>
+    
+    <!-- Create Event Button -->
+    <a href="{% url 'create_event' %}" class="bg-blue-600 text-white p-2 rounded mb-4 inline-block">Create Event</a>
+
+    <!-- Events Table -->
+    <h2 class="text-xl font-bold mb-4">Your Events</h2>
+    <table class="w-full border-collapse">
+        <thead>
+            <tr class="bg-gray-200">
+                <th class="p-2">Name</th>
+                <th class="p-2">Date</th>
+                <th class="p-2">Location</th>
+                <th class="p-2">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for event in events %}
+            <tr class="border-b">
+                <td class="p-2">{{ event.name }}</td>
+                <td class="p-2">{{ event.date }}</td>
+                <td class="p-2">{{ event.location }}</td>
+                <td class="p-2">
+                    <a href="{% url 'event_detail' event.id %}" class="text-blue-600">View</a>
+                    <a href="{% url 'update_event' event.id %}" class="text-green-600 ml-2">Edit</a>
+                    <a href="{% url 'delete_event' event.id %}" class="text-red-600 ml-2">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
