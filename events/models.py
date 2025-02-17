@@ -1,42 +1,19 @@
 from django.db import models
+from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractUser
 
+User = get_user_model()
 
 class CustomUser(AbstractUser):
     email = models.EmailField(unique=True)
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
 
-    groups = models.ManyToManyField(
-        'auth.Group',
-        verbose_name='groups',
-        blank=True,
-        help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.',
-        related_name="customuser_groups", 
-        related_query_name="customuser",
-    )
-    user_permissions = models.ManyToManyField(
-        'auth.Permission',
-        verbose_name='user permissions',
-        blank=True,
-        help_text='Specific permissions for this user.',
-        related_name="customuser_permissions",
-        related_query_name="customuser",
-    )
-
     def __str__(self):
         return self.username
-
 class Category(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
-
-    def __str__(self):
-        return self.name
-
-class Participant(models.Model):
-    name = models.CharField(max_length=100)
-    email = models.EmailField()
 
     def __str__(self):
         return self.name
@@ -49,9 +26,10 @@ class Event(models.Model):
     location = models.CharField(max_length=200)
     category = models.ForeignKey(
         Category, on_delete=models.CASCADE, related_name='events')
-    participants = models.ManyToManyField(Participant, related_name='events')
+    organizer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='organized_events')
+    participants = models.ManyToManyField(User, related_name='events_participated', blank=True)
+    rsvp_users = models.ManyToManyField(User, related_name='rsvp_events', blank=True)
     image = models.ImageField(upload_to='event_images/', default='event_images/default.jpg')
-    rsvp_users = models.ManyToManyField(CustomUser, related_name='rsvp_events', blank=True)
 
     def __str__(self):
         return self.name

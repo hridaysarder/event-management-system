@@ -3,30 +3,11 @@ from django.db.models import Count, Q
 from django.utils import timezone
 from events.models import Event, Participant, Category
 from events.forms import EventForm, ParticipantForm, CategoryForm
-from django.shortcuts import get_object_or_404, redirect
-from django.contrib.auth.decorators import login_required
 
-# @login_required
-# def rsvp_event(request, event_id):
-#     event = get_object_or_404(Event, id=event_id)
-#     if request.user not in event.rsvp_users.all():
-#         event.rsvp_users.add(request.user)
-#         # Send confirmation email (Step 5)
-#     return redirect('event_detail', pk=event_id)
-
-# def event_list(request):
-#     events = Event.objects.select_related(
-#         'category').prefetch_related('participants').all()
-#     return render(request, 'events/event_list.html', {'events': events})
-
-@login_required
 def event_list(request):
-    is_admin = request.user.groups.filter(name='Admin').exists()
-    is_organizer = request.user.groups.filter(name='Organizer').exists()
-    return render(request, 'events/event_list.html', {
-        'is_admin': is_admin,
-        'is_organizer': is_organizer,
-    })
+    events = Event.objects.select_related(
+        'category').prefetch_related('participants').all()
+    return render(request, 'events/event_list.html', {'events': events})
 
 
 def event_detail(request, id):
@@ -56,12 +37,6 @@ def update_event(request, id):
         form = EventForm(instance=event)
     return render(request, 'events/event_form.html', {'form': form})
 
-@login_required
-def rsvp_event(request, event_id):
-    event = get_object_or_404(Event, id=event_id)
-    if request.user not in event.rsvp_users.all():
-        event.rsvp_users.add(request.user)
-    return redirect('event_detail', pk=event_id)
 
 def delete_event(request, id):
     event = get_object_or_404(Event, id=id)
