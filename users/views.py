@@ -24,7 +24,7 @@ def sign_up(request):
             user.is_active = False
             user.save()
 
-            participant_group = Group.objects.get(name='Participant')
+            participant_group,created = Group.objects.get_or_create(name='Participant')
             user.groups.add(participant_group)
 
             UserProfile.objects.create(user=user)

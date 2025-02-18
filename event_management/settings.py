@@ -28,7 +28,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'users',
-    'events'
+    'events',
+    'core'
 ]
 
 MIDDLEWARE = [
@@ -139,7 +140,9 @@ EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 
 FRONTEND_URL = 'http://127.0.0.1:8000'
 
-LOGIN_URL='login'
+LOGIN_URL = 'sign-in'
+
+LOGIN_REDIRECT_URL = '/dashboard/'
 
 MEDIA_URL='/media/'
 MEDIA_ROOT=BASE_DIR/'media'

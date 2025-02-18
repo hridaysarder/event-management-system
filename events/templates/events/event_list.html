@@ -1,20 +1,84 @@
-{% extends 'events/base.html' %}
+{% extends 'base.html' %}
 
 {% block content %}
-<h1 class="text-2xl font-bold mb-4">Events</h1>
-<form method="get" action="{% url 'search_events' %}" class="mb-4">
-    <input type="text" name="q" placeholder="Search events..." class="p-2 border rounded">
-    <button type="submit" class="bg-blue-600 text-white p-2 rounded">Search</button>
-</form>
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-    {% for event in events %}
-    <div class="bg-white p-4 rounded shadow">
-        <h2 class="text-xl font-bold">{{ event.name }}</h2>
-        <p class="text-gray-600">{{ event.category.name }}</p>
-        <p class="text-gray-600">{{ event.date }} at {{ event.time }}</p>
-        <p class="text-gray-600">{{ event.location }}</p>
-        <a href="{% url 'event_detail' event.pk %}" class="text-blue-600">View Details</a>
+
+<!-- Hero Section -->
+<section class="bg-gray-100 py-8">
+    <div class="container mx-auto text-center px-4">
+        <h1 class="text-4xl md:text-5xl font-bold text-blue-500">Find Your Next Adventure</h1>
+        <p class="text-gray-700 mt-2 text-sm md:text-base">Explore, join, and create amazing events with ease!</p>
     </div>
-    {% endfor %}
-</div>
+</section>
+
+<!-- Event Search -->
+<form method="GET" action="{% url 'event_list' %}" class="mb-4 flex-col md:flex-row items-center gap-2">
+    <input type="text" name="q" value="{{ request.GET.q }}" class="p-2 border rounded w-full md:w-1/2" placeholder="Search events by name or location">
+    <select name="category" class="p-2 border rounded w-full md:w-auto">
+        <option value="">All Categories</option>
+        {% for category in categories %}
+        <option value="{{ category.id }}" {% if category.id|stringformat:"s" == request.GET.category %}selected{% endif %}>{{ category.name }}</option>
+        {% endfor %}
+    </select>
+    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded w-full md:w-auto">Filter</button>
+</form>
+
+
+<!-- Event List -->
+<section class="py-8 bg-gray-50">
+    <div class="container mx-auto px-4">
+        <h2 class="text-2xl font-bold text-gray-700 mb-6">All Events</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for event in events %}
+            <div class="event-card bg-white shadow-lg rounded overflow-hidden">
+                <!-- Event Image -->
+                {% if event.event_image %}
+                    <img src="{{ event.event_image.url }}" alt="{{ event.name }}" class="w-full h-40 object-cover">
+                {% else %}
+                    <div class="w-full h-40 bg-gray-300 flex items-center justify-center text-gray-500 italic">
+                        No Image Available
+                    </div>
+                {% endif %}
+               
+                <div class="p-4">
+                    <!-- Event Title -->
+                    <h3 class="text-xl font-semibold text-teal-600 truncate">{{ event.name }}</h3>
+                    <!-- Event Location -->
+                    <p class="text-gray-700 mt-2"><strong>Location:</strong> {{ event.location }}</p>
+                    <p class="text-gray-600"><strong>Date:</strong> {{ event.date }} | <strong>Time:</strong> {{ event.time }}</p>
+                    {% comment %} <p class="mt-2">{{ event.description }}</p> {% endcomment %}
+                    <!-- Event Participants -->
+                    <p class="text-gray-700"><strong>Participants:</strong> {{ event.participants.count }}</p>
+                    <!-- View Details -->
+                    <a 
+                        href="{% url 'event_detail' event.id %}" 
+                        target="_blank" 
+                        class="text-blue-500 hover:underline my-4 block">
+                        View Details
+                    </a>
+
+                    <!-- RSVP Button -->
+                    <div class="flex justify-between items-center mt-4">
+                        {% if user.is_authenticated %}
+                            {% if user in event.participants.all %}
+                                <button class="bg-gray-300 text-white px-4 py-2 rounded cursor-not-allowed" disabled>
+                                    RSVP Done
+                                </button>
+                            {% else %}
+                                <a href="{% url 'event_rsvp' event.id %}" class="bg-teal-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
+                                    RSVP Now
+                                </a>
+                            {% endif %}
+                        {% else %}
+                            <a href="{% url 'sign-in' %}" class="bg-blue-900 text-white px-4 py-2 rounded hover:bg-blue-950 transition">
+                                Login to RSVP!
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
 {% endblock %}
