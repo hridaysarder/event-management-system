@@ -1,8 +1,9 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Count, Q
 from django.utils import timezone
-from events.models import Event, Participant, Category
-from events.forms import EventForm, ParticipantForm, CategoryForm
+from events.models import Event, Category
+from events.forms import EventForm
+from django.contrib.auth.decorators import login_required, user_passes_test
 
 def event_list(request):
     events = Event.objects.select_related(
@@ -47,7 +48,7 @@ def delete_event(request, id):
 
 
 def organizer_dashboard(request):
-    total_participants = Participant.objects.count()
+    # total_participants = Participant.objects.count()
     total_events = Event.objects.count()
     upcoming_events = Event.objects.filter(
         date__gte=timezone.now().date()).count()
@@ -55,7 +56,7 @@ def organizer_dashboard(request):
     today_events = Event.objects.filter(date=timezone.now().date())
 
     return render(request, 'events/dashboard.html', {
-        'total_participants': total_participants,
+        # 'total_participants': total_participants,
         'total_events': total_events,
         'upcoming_events': upcoming_events,
         'past_events': past_events,
@@ -72,3 +73,10 @@ def search_events(request):
     else:
         events = Event.objects.all()
     return render(request, 'events/event_list.html', {'events': events})
+
+@login_required
+def rsvp_event(request, event_id):
+    event = get_object_or_404(Event, id=event_id)
+    if request.user not in event.rsvp_users.all():
+        event.rsvp_users.add(request.user)
+    return redirect('event_list')
