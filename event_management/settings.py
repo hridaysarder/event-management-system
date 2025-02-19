@@ -1,6 +1,5 @@
 from pathlib import Path
 from decouple import config
-import dj_database_url
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -9,7 +8,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-j31*8nx1)q+n#4b=3xth+05)@y=@z4+o!w8u&h4#7183mb%hbv'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -17,7 +16,6 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 CSRF_TRUSTED_ORIGINS=['https://*.onrender.com','http://127.0.0.1:8000']
 
-# AUTH_USER_MODEL = 'events.CustomUser'
 # Application definition
 
 INSTALLED_APPS = [
@@ -29,6 +27,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'users',
     'events',
+    "debug_toolbar",
     'core'
 ]
 
@@ -40,7 +39,15 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
+
+INTERNAL_IPS = [
+    # ...
+    "127.0.0.1",
+    # ...
+]
+
 
 ROOT_URLCONF = 'event_management.urls'
 
@@ -69,11 +76,11 @@ WSGI_APPLICATION = 'event_management.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'event-management-system',
-        'USER': 'postgres',
-        'PASSWORD': '1234',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'NAME': config('DB_NAME',default=''),
+        'USER': config('USER',default=''),
+        'PASSWORD': config('PASSWORD',default=''),
+        'HOST': config('HOST',default='localhost'),
+        'PORT': config('PORT',cast=int)
     }
 }
 
@@ -125,6 +132,8 @@ STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -138,11 +147,15 @@ EMAIL_PORT = config('EMAIL_PORT')
 EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 
+# EMAIL_HOST = "smtp.gmail.com"
+# EMAIL_USE_TLS = "True"
+# EMAIL_PORT = "587"
+# EMAIL_HOST_USER = "hridoyaug12@gmail.com"
+# EMAIL_HOST_PASSWORD = "glda fvcm jazl cpkv"
+
 FRONTEND_URL = 'http://127.0.0.1:8000'
 
 LOGIN_URL = 'sign-in'
 
 LOGIN_REDIRECT_URL = '/dashboard/'
 
-MEDIA_URL='/media/'
-MEDIA_ROOT=BASE_DIR/'media'

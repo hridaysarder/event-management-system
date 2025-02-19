@@ -17,7 +17,7 @@ def send_activation_email(sender, instance, created, **kwargs):
         recipient_list = [instance.email]
 
         try:
-            send_mail(subject, message, settings.EMAIL_HOST_USER, recipient_list, fail_silently=False)
+            send_mail(subject, message, settings.EMAIL_HOST_USER, recipient_list)
         except Exception as e:
             print(f"Failed to send email to {instance.email}: {str(e)}")
 
@@ -37,7 +37,7 @@ def send_rsvp_confirmation(sender, instance, action, pk_set, **kwargs):
             send_mail(
                 subject="RSVP Confirmation",
                 message=f"Hello {user.username},\n\nYou have successfully RSVP for the event '{instance.name}'.",
-                from_email="admin@eventbangla.com",
+                from_email="hridoyaug12@gmail.com",
                 recipient_list=[user.email],
                 fail_silently=False,
             )

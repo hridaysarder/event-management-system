@@ -1,78 +1,45 @@
-{% extends 'events/base.html' %}
+{% extends 'base.html' %}
 
 {% block content %}
-<div class="bg-white p-6 rounded shadow max-w-2xl mx-auto">
-    <h1 class="text-2xl font-bold mb-4">
-        {% if form.instance.pk %}
-            Update Event
-        {% else %}
-            Create Event
-        {% endif %}
-    </h1>
-    <form method="post">
+<div class="container mx-auto w-3/5 mx-w-md my-9 bg-white p-6 rounded-lg shadow-lg">
+    <h1 class="text-3xl font-semibold mb-6 text-blue-950">{{ form.instance.id|yesno:"Update Event,Create Event" }}</h1>
+
+    <!-- Display success message -->
+    {% if messages %}
+    <div class="mb-6">
+        {% for message in messages %}
+        <div class="text-green-600 bg-green-100 p-3 rounded-lg shadow-md">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <form method="post" enctype="multipart/form-data" class="space-y-6">
         {% csrf_token %}
-        <div class="mb-4">
-            <label class="block text-gray-700">Name</label>
-            <input type="text" name="name" class="border border-gray-300 rounded p-2 w-full" value="{{ form.name.value|default_if_none:'' }}">
-            {% if form.name.errors %}
-                <p class="text-red-500 text-sm">{{ form.name.errors }}</p>
+        
+        <!-- Hidden input for next -->
+        <input type="hidden" name="next" value="{{ next_url }}">
+        
+        {% for field in form %}
+        <div class="mb-5">
+            <label for="{{ field.id_for_label }}" class="block font-medium text-gray-700 mb-1">{{ field.label }}</label>
+            <div class="mt-1">
+                {{ field }}
+            </div>
+            {% if field.help_text %}
+            <p class="text-xs text-gray-500 mt-1">{{ field.help_text }}</p>
+            {% endif %}
+            {% if field.errors %}
+            <p class="bg-red-100 text-red-600 p-2 rounded mb-4">{{ field.errors|join:", " }}</p>
             {% endif %}
         </div>
-        <div class="mb-4">
-            <label class="block text-gray-700">Description</label>
-            <textarea name="description" class="border border-gray-300 rounded p-2 w-full">{{ form.description.value|default_if_none:'' }}</textarea>
-            {% if form.description.errors %}
-                <p class="text-red-500 text-sm">{{ form.description.errors }}</p>
-            {% endif %}
-        </div>
-        <div class="mb-4">
-            <label class="block text-gray-700">Date</label>
-            <input type="date" name="date" class="border border-gray-300 rounded p-2 w-full" value="{{ form.date.value|default_if_none:'' }}">
-            {% if form.date.errors %}
-                <p class="text-red-500 text-sm">{{ form.date.errors }}</p>
-            {% endif %}
-        </div>
-        <div class="mb-4">
-            <label class="block text-gray-700">Time</label>
-            <input type="time" name="time" class="border border-gray-300 rounded p-2 w-full" value="{{ form.time.value|default_if_none:'' }}">
-            {% if form.time.errors %}
-                <p class="text-red-500 text-sm">{{ form.time.errors }}</p>
-            {% endif %}
-        </div>
-        <div class="mb-4">
-            <label class="block text-gray-700">Location</label>
-            <input type="text" name="location" class="border border-gray-300 rounded p-2 w-full" value="{{ form.location.value|default_if_none:'' }}">
-            {% if form.location.errors %}
-                <p class="text-red-500 text-sm">{{ form.location.errors }}</p>
-            {% endif %}
-        </div>
-        <div class="mb-4">
-            <label class="block text-gray-700">Category</label>
-            <select name="category" class="border border-gray-300 rounded p-2 w-full">
-                {% for category in form.category.field.queryset %}
-                    <option value="{{ category.id }}" {% if form.category.value == category.id %}selected{% endif %}>
-                        {{ category.name }}
-                    </option>
-                {% endfor %}
-            </select>
-            {% if form.category.errors %}
-                <p class="text-red-500 text-sm">{{ form.category.errors }}</p>
-            {% endif %}
-        </div>
-        <div class="mb-4">
-            <label class="block text-gray-700">Participants</label>
-            <select name="participants" multiple class="border border-gray-300 rounded p-2 w-full">
-                {% for participant in form.participants.field.queryset %}
-                    <option value="{{ participant.id }}" {% if participant.id in form.participants.value %}selected{% endif %}>
-                        {{ participant.name }}
-                    </option>
-                {% endfor %}
-            </select>
-            {% if form.participants.errors %}
-                <p class="text-red-500 text-sm">{{ form.participants.errors }}</p>
-            {% endif %}
-        </div>
-        <button type="submit" class="bg-blue-600 text-white p-2 rounded">Create</button>
+        {% endfor %}
+        
+        <button type="submit" class="w-full py-3 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50">
+            Submit
+        </button>
     </form>
 </div>
 {% endblock %}
+
