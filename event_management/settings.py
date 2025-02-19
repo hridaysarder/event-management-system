@@ -1,5 +1,6 @@
 from pathlib import Path
 from decouple import config
+import dj_database_url
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -73,25 +74,25 @@ WSGI_APPLICATION = 'event_management.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config('DB_NAME',default=''),
-        'USER': config('USER',default=''),
-        'PASSWORD': config('PASSWORD',default=''),
-        'HOST': config('HOST',default='localhost'),
-        'PORT': config('PORT',cast=int)
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': config('DB_NAME',default=''),
+#         'USER': config('USER',default=''),
+#         'PASSWORD': config('PASSWORD',default=''),
+#         'HOST': config('HOST',default='localhost'),
+#         'PORT': config('PORT',cast=int)
+#     }
+# }
 
 # Replace the SQLite DATABASES configuration with PostgreSQL:
-# DATABASES = {
-#     'default': dj_database_url.config(
-#         # Replace this value with your local database's connection string.
-#         default='postgresql://event_management_system_hnl8_user:OvLrKdLXXbaMyXuNpg2GMgNW1guH3Z6I@dpg-cueevql2ng1s7388q10g-a.oregon-postgres.render.com/event_management_system_hnl8',
-#         conn_max_age=600
-#     )
-# }
+DATABASES = {
+    'default': dj_database_url.config(
+        # Replace this value with your local database's connection string.
+        default='postgresql://event_manager_db_arma_user:AzYiYD9oJ46HEdZcEZ7J3SUKwbqaUMPu@dpg-cuqvu4bqf0us73f7g8m0-a.oregon-postgres.render.com/event_manager_db_arma',
+        conn_max_age=600
+    )
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
