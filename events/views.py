@@ -28,9 +28,7 @@ def event_list(request):
     category_id = request.GET.get('category')
     query = request.GET.get('q', '')
 
-    # events = Event.objects.select_related('category').all()
     events = Event.objects.select_related('category').prefetch_related('participants').all()
-
 
     if start_date and end_date:
         events = events.filter(date__range=[start_date, end_date])
@@ -39,7 +37,6 @@ def event_list(request):
     if query:
         events = events.filter(Q(name__icontains=query) | Q(location__icontains=query))
 
-    # events = events.prefetch_related('participants')
     categories = Category.objects.all()
     total_participants = User.objects.filter(rsvp_events__isnull=False).distinct().count()
 
@@ -53,7 +50,6 @@ def event_list(request):
 
 
 def event_detail(request, id):
-    # event = get_object_or_404(Event, id=id)
     event = get_object_or_404(Event.objects.select_related('category').prefetch_related('participants'), id=id)
 
     return render(request, 'events/event_detail.html', {'event': event})
@@ -143,18 +139,14 @@ def participant_list(request):
 @user_passes_test(is_organizer, login_url='no-permission')
 def organizer_dashboard(request):    
     today = timezone.now().date()
-
     events = Event.objects.select_related('category').prefetch_related('participants').all()
     today_events = events.filter(date=today)
     myEvents = Event.objects.filter(organizer=request.user)
-
     total_participants = User.objects.filter(rsvp_events__isnull=False).distinct().count()
-    # total_participants = Event.objects.aggregate(total=Count('participants', distinct=True))['total'] or 0
     total_events = Event.objects.count()
     total_upcoming_events = Event.objects.filter(date__gte=timezone.now()).count()
     total_past_events = Event.objects.filter(date__lt=timezone.now()).count()
 
-    # events = Event.objects.select_related('category').all()
     filter = request.GET.get('filter', None)
     category = request.GET.get('category', None)
     filter_title = "Today's Events"
@@ -210,7 +202,6 @@ def participant_dashboard(request):
 
     events = Event.objects.select_related('category').prefetch_related('participants').all()
     today_events = events.filter(date=today)
-    # today_events = Event.objects.filter(date=today)
     rsvp_events = request.user.rsvp_events.all()
 
     total_participants = Event.objects.aggregate(total=Count('participants', distinct=True))['total'] or 0
@@ -218,7 +209,6 @@ def participant_dashboard(request):
     total_upcoming_events = Event.objects.filter(date__gte=timezone.now()).count()
     total_past_events = Event.objects.filter(date__lt=timezone.now()).count()
 
-    # events = Event.objects.select_related('category').all()
     filter = request.GET.get('filter', None)
     category = request.GET.get('category', None)
     filter_title = "Today's Events"
@@ -298,7 +288,6 @@ def category_create(request):
 def category_update(request, id):
     category = get_object_or_404(Category, id=id)
 
-    # if category.organizer is None or (request.user != category.organizer and not request.user.is_superuser):
     if category.organizer != request.user and not request.user.is_superuser:
         messages.error(request, "You are not authorized to edit this category.")
         return redirect("dashboard")
@@ -313,7 +302,6 @@ def category_update(request, id):
         form = CategoryForm(instance=category)
 
     return render(request, "events/category_form.html", {"form": form})
-
 
 
 @login_required

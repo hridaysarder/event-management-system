@@ -22,7 +22,6 @@
     <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded w-full md:w-auto">Search</button>
 </form>
 
-
 <!-- Event List -->
 <section class="py-8 bg-gray-50">
     <div class="container mx-auto px-4">
@@ -45,7 +44,6 @@
                     <!-- Event Location -->
                     <p class="text-gray-700 mt-2"><strong>Location:</strong> {{ event.location }}</p>
                     <p class="text-gray-600"><strong>Date:</strong> {{ event.date }} | <strong>Time:</strong> {{ event.time }}</p>
-                    {% comment %} <p class="mt-2">{{ event.description }}</p> {% endcomment %}
                     <!-- Event Participants -->
                     <p class="text-gray-700"><strong>Participants:</strong> {{ event.participants.count }}</p>
                     <!-- View Details -->
@@ -55,7 +53,6 @@
                         class="text-blue-500 hover:underline my-4 block">
                         View Details
                     </a>
-
                     <!-- RSVP Button -->
                     <div class="flex justify-between items-center mt-4">
                         {% if user.is_authenticated %}
