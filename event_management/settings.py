@@ -159,9 +159,9 @@ EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 # EMAIL_HOST_USER = "hridoyaug12@gmail.com"
 # EMAIL_HOST_PASSWORD = "glda fvcm jazl cpkv"
 
-# FRONTEND_URL = 'http://127.0.0.1:8000'
+FRONTEND_URL = 'http://127.0.0.1:8000'
 
-FRONTEND_URL = 'https://event-management-system-umjv.onrender.com/'
+# FRONTEND_URL = 'https://event-management-system-umjv.onrender.com/'
 
 LOGIN_URL = 'sign-in'
 
