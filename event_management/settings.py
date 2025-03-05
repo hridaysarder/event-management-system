@@ -147,7 +147,6 @@ STATICFILES_DIRS = [
 ]
 
 MEDIA_URL = '/media/'
-# MEDIA_ROOT = BASE_DIR / 'media'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
@@ -162,15 +161,10 @@ EMAIL_PORT = config('EMAIL_PORT')
 EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 
-# EMAIL_HOST = "smtp.gmail.com"
-# EMAIL_USE_TLS = "True"
-# EMAIL_PORT = "587"
-# EMAIL_HOST_USER = "hridoyaug12@gmail.com"
-# EMAIL_HOST_PASSWORD = "glda fvcm jazl cpkv"
 
-FRONTEND_URL = 'http://127.0.0.1:8000'
+# FRONTEND_URL = 'http://127.0.0.1:8000'
 
-# FRONTEND_URL = 'https://event-management-system-umjv.onrender.com/'
+FRONTEND_URL = 'https://event-management-system-umjv.onrender.com/'
 
 LOGIN_URL = 'sign-in'
 
