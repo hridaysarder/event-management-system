@@ -19,6 +19,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 CSRF_TRUSTED_ORIGINS=['https://*.onrender.com','http://127.0.0.1:8000']
+AUTH_USER_MODEL = 'users.CustomUser'
 
 # Application definition
 
@@ -74,6 +75,13 @@ TEMPLATES = [
 WSGI_APPLICATION = 'event_management.wsgi.application'
 
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
@@ -92,7 +100,7 @@ WSGI_APPLICATION = 'event_management.wsgi.application'
 DATABASES = {
     'default': dj_database_url.config(
         # Replace this value with your local database's connection string.
-        default='postgresql://event_manager_db_arma_user:AzYiYD9oJ46HEdZcEZ7J3SUKwbqaUMPu@dpg-cuqvu4bqf0us73f7g8m0-a.oregon-postgres.render.com/event_manager_db_arma',
+        default='postgresql://event_manager_db_3302_user:xny1Xbzzz9YFJZGxkGiRMOv7VtWZL2US@dpg-cv3j7svnoe9s73c3ecf0-a.oregon-postgres.render.com/event_manager_db_3302',
         conn_max_age=600
     )
 }
@@ -123,7 +131,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Dhaka'
 
 USE_I18N = True
 
@@ -139,7 +147,8 @@ STATICFILES_DIRS = [
 ]
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+# MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -166,4 +175,6 @@ FRONTEND_URL = 'http://127.0.0.1:8000'
 LOGIN_URL = 'sign-in'
 
 LOGIN_REDIRECT_URL = '/dashboard/'
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
